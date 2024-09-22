@@ -7,8 +7,9 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useCallback } from "react";
 import Grid from "@mui/material/Grid";
+import simulator from "@/services/simulator";
 
 const Home: React.FC = () => {
   const defaultInputs = [
@@ -30,10 +31,10 @@ const Home: React.FC = () => {
     setInputValue(e.target.value);
   };
 
-  const handleSimulate = () => {
-    const data = ["ok1", "ok2"];
-    setResults(data);
-  };
+  const handleSimulate = useCallback(() => {
+    const results = simulator.run(inputValue.split(INPUT_SEPARATOR));
+    setResults(results);
+  }, [inputValue]);
 
   return (
     <Grid container spacing={2} margin={2}>
@@ -61,7 +62,7 @@ const Home: React.FC = () => {
       </Grid>
       <Grid item xs={10}>
         <Typography variant="h6" gutterBottom>
-          Outputs:
+          Robots final positions:
         </Typography>
         <List>
           {results.map((item, index) => (
